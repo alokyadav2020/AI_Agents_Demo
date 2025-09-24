@@ -1,3 +1,7 @@
 streamlit
 scrapegraphai
 playwright
+langchain-core
+langchain-groq
+langchain-openai
+python-dotenv
