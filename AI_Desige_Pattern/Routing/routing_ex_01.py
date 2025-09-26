@@ -1,8 +1,13 @@
 import asyncio
-from openai import OpenAI
-from agents import Agent, Runner
+from openai import AsyncOpenAI
+from agents import Agent, Runner, trace, function_tool, OpenAIChatCompletionsModel, input_guardrail, GuardrailFunctionOutput
 from dotenv import load_dotenv
 load_dotenv(override=True)
+import os
+groq_api_key = os.getenv('GROQ_API_KEY')
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+groq_client = AsyncOpenAI(base_url=GROQ_BASE_URL, api_key=groq_api_key)
+llama3_3_model = OpenAIChatCompletionsModel(model="llama-3.3-70b-versatile", openai_client=groq_client)
 # from agents.extensions.models.litellm_model import LitellmModel
 
 # It is recommended to set the API key as an environment variable.
@@ -16,18 +21,21 @@ poet_agent = Agent(
     # The handoff_description provides context to the router agent.
     handoff_description="This agent is a master of poetic forms and styles. Use it for any requests related to poetry.",
     instructions="You are a world-renowned poet. Your purpose is to craft beautiful and evocative poetry in the style requested by the user. Pay close attention to rhythm, meter, and imagery.",
+    model=llama3_3_model,
 )
 
 scriptwriter_agent = Agent(
     name="Scriptwriter Agent",
     handoff_description="This agent specializes in writing scripts for short videos. It understands pacing, dialogue, and visual storytelling.",
     instructions="You are a professional scriptwriter. Your task is to write a compelling script based on the user's prompt. Include scene headings, character actions, and dialogue.",
+    model=llama3_3_model,
 )
 
 ad_copywriter_agent = Agent(
     name="Ad Copywriter Agent",
     handoff_description="This agent is an expert in crafting persuasive and engaging advertising copy.",
     instructions="You are a senior advertising copywriter. Your goal is to write concise, impactful, and persuasive copy that grabs the reader's attention and drives them to action.",
+    model=llama3_3_model,
 )
 
 
@@ -38,6 +46,8 @@ creative_director_agent = Agent(
     instructions="You are the Creative Director of a content agency. Your job is to analyze the user's request and delegate it to the most appropriate specialist on your team.",
     # The handoffs list defines which agents this router can delegate to.
     handoffs=[poet_agent, scriptwriter_agent, ad_copywriter_agent],
+   
+    model=llama3_3_model,
 )
 
 # --- 3. Run the Agentic Workflow ---

@@ -11,7 +11,8 @@ artifacts
 notebook
 venv
 .streamlit
-
+Experiments
+./Experiments
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
