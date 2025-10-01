@@ -13,6 +13,8 @@ venv
 .streamlit
 Experiments
 ./Experiments
+
+./notebook
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
